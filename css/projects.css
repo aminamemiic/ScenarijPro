@@ -1,5 +1,6 @@
 html {
     background-color: #f5f6fa;
+    font-family: 'Poppins', sans-serif;
 }
 
 .sidebar {
@@ -7,16 +8,18 @@ html {
     width: 250px;
     height: 100vh;    
     margin: 0;
-    position: fixed;
     top: 0;
     left: 0;
+}
+
+.layout {
+    display: flex;
 }
 
 .menu {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    font-family: sans-serif;
 }
 
 .menu .item {
@@ -31,7 +34,7 @@ html {
 
 .menu .active {
     background-color: rgb(224, 232, 254);
-    color: rgb(60, 0, 255);
+    color: #5B3FFF;
     font-weight: bold;  
     padding: 10px;
 }
@@ -43,18 +46,17 @@ i {
 hr {
     margin-top: 30px;
     margin-bottom: 20px;
-    border-top: 1px rgb(232, 232, 232);
+    border-top: 1px rgb(225, 224, 224);
     margin-left: 20px;
     margin-right: 20px;
 }
 
 .naslov {
     font-size: 24px;
-    font-family: Poppins, sans-serif;
     font-weight: bold;
-    margin: 20px;
+    margin: 30px;
     margin-left: 20px;
-    color: rgb(60, 0, 255);
+    color: #5B3FFF;
 }
 
 .user-box {
@@ -76,14 +78,12 @@ hr {
     justify-content: center;
     align-items: center;
     font-weight: 500;
-    font-family: sans-serif;
     color: white;
     font-size: 19px;
 }
 
 .user-info .ime {
     font-size: 14px;
-    font-family: sans-serif;
     color: #333333;
     padding: 0;
     margin: 0 0;
@@ -91,8 +91,48 @@ hr {
 
 .user-info .uloga {
     font-size: 12px;
-    font-family: sans-serif;
     color: #777777;
     padding: 0;
     margin: 0 0;
+}
+
+.sadrzaj {
+    flex: 1;
+    padding: 20px;
+}
+
+.zaglavlje {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.glavni-naslov {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 20px 10px;
+    color: #333333;
+}
+
+#pretrazivanje {
+    width: 100px;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 14px;
+    color: #555;
+    margin-right: 5px;
+}
+
+#dugme-pretrazi {
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    background-color: #5B3FFF;
+    color: white;
+    font-size: 14px;
+    padding: 0 15px;
+    cursor: pointer;
+    margin-left: 5px;
 }
