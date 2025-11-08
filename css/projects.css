@@ -163,7 +163,7 @@ hr {
     margin-top: 20px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 750px) {
     .projekti {
         grid-template-columns: 1fr;
     }
