@@ -104,6 +104,17 @@ hr {
     margin: 0 0;
 }
 
+@media (max-width: 750px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%; 
+        height: auto;
+    }
+}
+
 .sadrzaj {
     flex: 1;
     padding: 20px;
@@ -133,7 +144,7 @@ hr {
     margin-right: 5px;
 }
 
-#dugme-pretrazi {
+#dugme-projekat {
     height: 35px;
     border: none;
     border-radius: 8px;
