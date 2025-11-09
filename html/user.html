@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Korisnički podaci</title>
+    <link rel="stylesheet" href="/css/user.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="podaci">
+        <h1 class="naslov">Postavke korisničkog računa</h1>
+        <hr>
+        <h3 class="upravljanje">Upravljajte vašim korisničkim računom, sigurnosnim postavkama i notifikacijama</h3>
+
+        <div class="racun-informacije">
+            <form>
+                <h2 class="podnaslov">Podaci o korisničkom računu</h2>
+
+                <div class="form-row">
+                    <label for="ime">Ime i prezime</label>
+                    <input type="text" id="ime" name="ime" value="John Doe">
+                </div>
+
+                <div class="form-row">
+                    <label for="email">Email adresa</label>
+                    <input type="email" id="email" name="email" value="john.doe@example.com">
+                </div>
+
+                <div class="form-row">
+                    <label for="broj-stranica">Broj elemenata po stranici (1-100)</label>
+                    <input type="number" id="broj-stranica" name="broj-stranica" value="10" min="1" max="100">
+                </div>
+            </form>
+        </div>
+
+        <div class="sigurnost">
+            <form>
+                <h2 class="podnaslov">Sigurnosne postavke</h2>
+
+                <div class="form-row">
+                    <label for="lozinka">Nova šifra</label>
+                    <input type="password" id="lozinka" name="lozinka" placeholder="Unesite novu lozinku">
+                </div>
+
+                <div class="tfa-grupa">
+                    <input type="checkbox" id="tfa" name="tfa">
+                    <label for="tfa">Omogući Two-Factor Authentication (2FA)</label>
+                </div>
+            </form>
+        </div>
+
+        <div class="notifikacije">
+            <form>
+                <h2 class="podnaslov">Postavke notifikacija</h2>
+
+                <div class="notifikacija-grupa">
+                    <p>Preferirani način komunikacije</p>
+
+                    <div class="opcije">
+                        <label><input type="radio" name="notif" value="Email" checked> Email</label>
+                        <label><input type="radio" name="notif" value="SMS"> SMS</label>
+                        <label><input type="radio" name="notif" value="None"> Nijedno</label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label for="frekvencija">Notification frequency</label>
+                    <select id="frekvencija" name="frekvencija">
+                        <option value="daily" selected>Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="none">Never</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <hr class="save">
+
+        <button id="spremi-promjene">Spasi promjene</button>
+    </div>
+</body>
+</html>
