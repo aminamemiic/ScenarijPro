@@ -1,6 +1,7 @@
 html {
     background-color: #f5f6fa;
     font-family: 'Poppins', sans-serif;
+    height: 100%;
 }
 
 html, body {
@@ -23,6 +24,7 @@ html, body {
 
 .layout {
     display: flex;
+    min-height: calc(100vh - 60px);
 }
 
 .nav-lijevo {
@@ -62,7 +64,7 @@ html, body {
 }
 
 .opcija:hover {
-    background-color: #d8dadf;
+    background-color: #f0f0f0;
 }
 
 .nav-desno {
@@ -79,8 +81,117 @@ html, body {
     padding: 9px 14px;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease;
 }
 
 #spremi:hover {
-    background-color: #23963d;
+    background-color: #218838;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: white;
+    border-right: 1px solid #ddd;
+    padding: 5px 20px;
+}
+
+.sidebar .naslov-scena {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.sidebar .scene-lista {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.sidebar .scene-lista li {
+    padding: 10px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #555;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.sidebar .scene-lista li:hover {
+    background-color: rgb(237, 242, 255);
+    border-left: #7d67ff 4px solid;
+    padding-left: 6px;
+    color: #2d2d2d;
+}
+
+.sidebar .scene-lista li.aktivna {
+    background-color: #e9eeff;
+    color: #333;
+    border-left: 4px solid #5B3FFF;
+    padding-left: 6px;
+}
+
+hr {
+    border-top: 1px #333;
+}
+
+@media (max-width: 750px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%; 
+        height: auto;
+    }
+
+    .nav-centar {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .opcija {
+        flex: 1 1 45%;
+    }
+
+    #spremi {
+        margin-left: auto;
+        margin-top: 8px;
+    }
+}
+
+.editor {
+    flex: 1;
+    margin: 40px 60px;
+    background-color: #fff;
+    box-sizing: border-box;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px 80px;
+    padding-top: 200px;
+    font-family:"Courier New", "Courier new", monospace;
+}
+
+.editor .naslov-skripte {
+    font-size: 22px;
+    font-weight: bold;
+    color: #d68a00;
+    margin: 20px 0;
+}
+
+.editor .tekst-skripte {
+    padding-top: 50px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: black;
+    white-space: pre-wrap;
+}
+
+.editor .tekst-skripte p {
+    margin-bottom: 1.5em;
+}
+
+.editor .tekst-skripte p:last-child {
+    margin-bottom: 0;
 }
