@@ -12,8 +12,7 @@ html, body {
 body {
     display: flex;
     justify-content: center;   
-    align-items: center;   
-    padding: 20px;   
+    align-items: center;
 }
 
 .podaci {
@@ -190,6 +189,9 @@ body {
 }
 
 @media (max-width: 750px) {
+    body {
+        align-items: flex-start; 
+    }
 
     .form-row {
         flex-direction: column;
