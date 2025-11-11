@@ -13,14 +13,16 @@ body {
     display: flex;
     justify-content: center;   
     align-items: center;
+    min-height: 100vh;
+    
 }
 
 .podaci {
     max-width: 840px;
     background-color: white;
-    margin: 0 auto;
-    padding-bottom: 30px;
+    margin: auto auto;         
     border-radius: 6px;
+    padding-bottom: 30px;
 }
 
 .podaci .naslov {
