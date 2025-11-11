@@ -3,6 +3,19 @@ html {
     font-family: 'Poppins', 'Inter', sans-serif;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;   
+    align-items: center;   
+    padding: 20px;   
+}
+
 .podaci {
     max-width: 840px;
     background-color: white;
@@ -130,10 +143,18 @@ html {
 }
 
 .notifikacija-grupa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-top: 15px;
     margin-left: 20px;
     font-size: 14px;
     color: #333333;
+}
+
+.notifikacija-grupa p {
+    margin: 0;
+    white-space: nowrap;
 }
 
 .notifikacije select {
@@ -142,8 +163,10 @@ html {
 
 .opcije {
     display: flex;
-    gap: 18px;
-    margin-bottom: 15px;
+    flex-wrap: nowrap;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 5px;
 }
 
 #spremi-promjene {
@@ -178,9 +201,45 @@ html {
         width: auto;
     }
 
-    .opcije {
+    .notifikacija-grupa {
         flex-direction: column;
-        gap: 6px;
+        align-items: flex-start;
+    }
+
+    .opcije {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        margin-top: 5px;
+    }
+
+    .opcije label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+    }
+
+    .tfa-grupa {
+        display: inline-flex;      
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        margin-left: 20px;
+        width: auto;              
+        flex-wrap: nowrap;         
+    }
+
+    #tfa {
+        margin: 0;                 
+        transform: scale(1.2);
+    }
+
+    .tfa-grupa label {
+        white-space: nowrap;       
+        margin: 0;
     }
 
     input,
