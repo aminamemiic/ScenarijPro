@@ -118,7 +118,7 @@ html, body {
 }
 
 .sidebar .scene-lista li:hover {
-    background-color: rgb(237, 242, 255);
+    background-color: rgb(240, 244, 255);
     border-left: #7d67ff 4px solid;
     padding-left: 6px;
     color: #2d2d2d;
@@ -133,31 +133,6 @@ html, body {
 
 hr {
     border-top: 1px #333;
-}
-
-@media (max-width: 750px) {
-    .layout {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%; 
-        height: auto;
-    }
-
-    .nav-centar {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    .opcija {
-        flex: 1 1 45%;
-    }
-
-    #spremi {
-        margin-left: auto;
-        margin-top: 8px;
-    }
 }
 
 .editor {
@@ -194,4 +169,37 @@ hr {
 
 .editor .tekst-skripte p:last-child {
     margin-bottom: 0;
+}
+
+@media (max-width: 750px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%; 
+        height: auto;
+    }
+
+    .zaglavlje {
+        gap: 6px;
+    }
+
+    .nav-centar {
+        flex-wrap: wrap;
+        gap: 6px;     
+    }
+
+    .opcija {
+        flex: 1 1 45%;
+    }
+
+    #spremi {
+        margin-left: auto;
+        margin-top: 8px;
+    }
+
+    .zaglavlje {
+        padding: 10px 5px;
+    }
 }
