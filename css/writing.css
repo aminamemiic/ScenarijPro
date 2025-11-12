@@ -179,9 +179,11 @@ hr {
     .sidebar {
         width: 100%; 
         height: auto;
+        padding: 5px;
     }
 
     .zaglavlje {
+        width: 100%;
         gap: 6px;
     }
 
