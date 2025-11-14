@@ -6,6 +6,8 @@
     <title>Pisanje Scenarija</title>
     <link rel="stylesheet" href="/css/writing.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <script src="/js/EditorTeksta.js"></script>
+    <script src="/js/editor.js"></script>
 </head>
 <body>
 
@@ -42,13 +44,29 @@
             </ul>
             <hr>
         </aside>
+        
+        <div class="desno">
+            <div class="metode">
+                <button onclick="editor.dajBrojRijeci()">Broj riječi</button>
+                <button onclick="editor.dajUloge()">Uloge</button>
+                <button onclick="editor.pogresnaUloga()">Pogrešna uloga</button>
+                <button onclick="editor.grupisiUloge()">Grupiši uloge</button>
+            </div>
 
-        <main class="editor">
-            <h3 class="naslov-skripte">EXT. LUNAR SURFACE - DAY</h3>
-            <p class="tekst-skripte">
+            <div class="alatna-traka">
+                <button onclick="editor.formatirajTekst('bold')"><i class="fas fa-bold"></i></button>
+                <button onclick="editor.formatirajTekst('italic')"><i class="fas fa-italic"></i></button>
+                <button onclick="editor.formatirajTekst('underline')"><i class="fas fa-underline"></i></button>
+            </div>
+
+            <div id="poruke"></div>
+
+            <div id="divEditor" contenteditable="true" class="editor">
+                <h3 class="naslov-skripte">EXT. LUNAR SURFACE - DAY</h3>
                 The vast, desolate lunar landscape stretches out under a pitch-black sky dotted with stars. In the distance, the Earth hangs majestically, a blue and white orb against the darkness. An astronaut, JANE, in a bulky spacesuit, trudges across the rocky terrain, her footsteps kicking up small clouds of lunar dust. She stops and looks around, her visor reflecting the eerie beauty of the moon's surface.
-            </p>
-        </main>
+            </div>
+        </div>
+
     </div>
 
 </body>

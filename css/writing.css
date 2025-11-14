@@ -90,6 +90,7 @@ html, body {
 
 .sidebar {
     width: 250px;
+    flex-shrink: 0;
     background-color: white;
     border-right: 1px solid #ddd;
     padding: 5px 20px;
@@ -135,16 +136,68 @@ hr {
     border-top: 1px #333;
 }
 
+.desna-kolona {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+    min-height: calc(100vh - 60px);
+}
+
+.metode  {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.metode button {
+    padding: 6px 10px;
+    background: #838383;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;    
+}
+
+.alatna-traka {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 5px; 
+    padding-bottom: 10px;
+}
+
+.alatna-traka button {
+    padding: 6px 10px;
+    background: #838383;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.alatna-traka button:hover {
+    background: #555;
+}
+
+#divEditor.editor {
+    flex-grow: 1;          
+    display: flex;
+    flex-direction: column;
+}
+
 .editor {
-    flex: 1;
-    margin: 40px 60px;
+    margin: 0 60px;
+    margin-bottom: 20px;
+    min-height: calc(100vh - 60px - 80px);
     background-color: #fff;
     box-sizing: border-box;
-    height: auto;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 20px 80px;
-    padding-top: 200px;
+    padding-top: 100px;
     font-family:"Courier New", "Courier new", monospace;
 }
 
