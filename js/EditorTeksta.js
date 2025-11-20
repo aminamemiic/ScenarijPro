@@ -98,7 +98,74 @@ let EditorTeksta = function(divRef) {
     }
 
     let pogresnaUloga = function() {
+        let linije = editor.innerText.split('\n');
+        let sveUloge = [];
 
+        for (let i = 0; i < linije.length; i++) {
+            if(/^[A-Z]+$/.test(linije[i].trim()) && linije[i].length > 0 && /[A-Z]/.test(linije[i].trim())) {
+                if (i + 1 < linije.length) {
+                    let sljedecaLinija = linije[i + 1].trim();
+                    if (sljedecaLinija != '' || !sljedecaLinija.startsWith('(')) {
+                        sveUloge.push(linije[i].trim());
+                    }
+                }
+            }
+        }
+
+        let brojacUloga = {};
+        for (let uloga of sveUloge) {
+            if (brojacUloga[uloga]) {
+                brojacUloga[uloga]++;
+            } else {
+                brojacUloga[uloga] = 1;
+            }
+        }
+
+        let brojRazlika = function(s1, s2) {
+            if (s1.length !== s2.length) {
+                return Infinity; 
+            }
+            
+            let razlike = 0;
+            for (let i = 0; i < s1.length; i++) {
+                if (s1[i] !== s2[i]) {
+                    razlike++;
+                }
+            }
+            return razlike;
+        };
+
+        let suVrloSlicna = function(ime1, ime2) {
+            if (ime1 === ime2) return false; 
+            
+            let razlika = brojRazlika(ime1, ime2);
+            
+            if (ime1.length > 5 && ime2.length > 5) {
+                return razlika <= 2;
+            }
+            
+            return razlika <= 1;
+        };
+
+        let pogresneUloge = new Set();
+
+        for (let imeA in brojacUloga) {
+            let brojanjeA = brojacUloga[imeA];
+            
+            for (let imeB in brojacUloga) {
+                if (imeA === imeB) continue;
+                
+                let brojanjeB = brojacUloga[imeB];
+                
+                if (suVrloSlicna(imeA, imeB)) {
+                    if (brojanjeB >= 4 && (brojanjeB - brojanjeA) >= 3) {
+                        pogresneUloge.add(imeA);
+                    }
+                }
+            }
+        }
+
+        return Array.from(pogresneUloge);
     }
 
     let brojLinijaTeksta = function(uloga) {
