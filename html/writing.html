@@ -6,8 +6,6 @@
     <title>Pisanje Scenarija</title>
     <link rel="stylesheet" href="/css/writing.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <script src="/js/EditorTeksta.js"></script>
-    <script src="/js/editor.js"></script>
 </head>
 <body>
 
@@ -46,28 +44,81 @@
         </aside>
         
         <div class="desno">
-            <div class="metode">
-                <button onclick="editor.dajBrojRijeci()">Broj riječi</button>
-                <button onclick="editor.dajUloge()">Uloge</button>
-                <button onclick="editor.pogresnaUloga()">Pogrešna uloga</button>
-                <button onclick="editor.grupisiUloge()">Grupiši uloge</button>
-            </div>
+            <div class="dugmad-poruke">
+                <div class="dugmad">
+                    <div class="metode">
+                        <button onclick="dajBrojRijeci()">Broj riječi</button>
+                        <button onclick="dajUloge()">Uloge</button>
+                        <button onclick="pogresnaUloga()">Pogrešna uloga</button>
+                        <button onclick="grupisiUloge()">Grupiši uloge</button>
+                        <button onclick="prikaziBrojLinija()">Broj linija teksta</button>
+                    </div>
 
-            <div class="alatna-traka">
-                <button onclick="editor.formatirajTekst('bold')"><i class="fas fa-bold"></i></button>
-                <button onclick="editor.formatirajTekst('italic')"><i class="fas fa-italic"></i></button>
-                <button onclick="editor.formatirajTekst('underline')"><i class="fas fa-underline"></i></button>
-            </div>
+                    <div class="alatna-traka">
+                        <button onclick="formatiraj('bold')"><i class="fas fa-bold"></i></button>
+                        <button onclick="formatiraj('italic')"><i class="fas fa-italic"></i></button>
+                        <button onclick="formatiraj('underline')"><i class="fas fa-underline"></i></button>
+                    </div>
+                </div>
 
-            <div id="poruke"></div>
+                <textarea id="output" rows="4" cols="30" readonly></textarea>
+            </div>
 
             <div id="divEditor" contenteditable="true" class="editor">
-                <h3 class="naslov-skripte">EXT. LUNAR SURFACE - DAY</h3>
-                The vast, desolate lunar landscape stretches out under a pitch-black sky dotted with stars. In the distance, the Earth hangs majestically, a blue and white orb against the darkness. An astronaut, JANE, in a bulky spacesuit, trudges across the rocky terrain, her footsteps kicking up small clouds of lunar dust. She stops and looks around, her visor reflecting the eerie beauty of the moon's surface.
+                INT. KITCHEN - DAY
+
+                The kitchen is small but clean. Morning sunlight fills the room.
+
+                ANNA
+                (gleda kroz prozor)
+                It's so quiet today.
+                I feel like something is about to happen.
+
+                MARK
+                (enters quietly)
+                Good morning.
+                Did you sleep well?
+
+                ANNA
+                (startled)
+                Oh—Mark.
+                You scared me.
+
+                (A moment of silence as they both look at the window.)
+
+                MARK
+                I didn't mean to.
+                I just wanted to check on you.
+
+                EXT. GARDEN - AFTERNOON
+
+                LUCAS
+                I told you this place would calm you down.
+
+                (steps closer)
+
+                LUCAS
+                You don't have to decide today.
+                Take your time.
+
+                ANNA
+                I know.
+                But waiting doesn't make it easier.
+
+                (A bird chirps loudly nearby.)
+
+                INT. KITCHEN - EVENING
+
+                The kitchen is darker now; only a lamp is on.
+
+                ANNA
+                I think… I finally know what to do.
             </div>
         </div>
 
     </div>
 
+    <script src="/js/EditorTeksta.js"></script>
+    <script src="/js/editor.js"></script>
 </body>
 </html>

@@ -85,7 +85,16 @@ let EditorTeksta = function(divRef) {
     };
 
     let dajUloge = function() {
+        let linije = editor.innerText.split('\n');
+        let uloge = new Set();
 
+        for (let i = 0; i < linije.length - 1; i++) {
+            if(/^[A-Z]+$/.test(linije[i].trim()) && linije[i+1].trim() != '') {
+                uloge.add(linije[i].trim());
+            }
+        }
+
+        return Array.from(uloge);
     }
 
     let pogresnaUloga = function() {
@@ -93,7 +102,19 @@ let EditorTeksta = function(divRef) {
     }
 
     let brojLinijaTeksta = function(uloga) {
+        let linije = editor.innerText.split('\n');
+        let brojLinija = 0;
 
+        for (let i = 0; i < linije.length - 1; i++) {
+            if (linije[i].trim() === uloga && linije[i + 1].trim() !== '') {
+                for (let j = i + 1; j < linije.length; j++) {
+                    if (linije[j].trim() === '') break;
+                    if (linije[j].trim().charAt(0) != '(') brojLinija++;
+                }
+            }
+        }
+
+        return brojLinija;
     }
 
     let scenarijUloge =function(uloga) {
@@ -104,14 +125,19 @@ let EditorTeksta = function(divRef) {
 
     }
 
-    let formatirajTekst = function() {
-
+    let formatirajTekst = function(komanda) {
+        document.execCommand(komanda, false, null);
+        editor.focus();
     }
 
     //povratne vrijednosti
     return {
         dajBrojRijeci: dajBrojRijeci,
         dajUloge: dajUloge,
-        pogresnaUloga: pogresnaUloga
+        pogresnaUloga: pogresnaUloga,
+        brojLinijaTeksta: brojLinijaTeksta,
+        scenarijUloge: scenarijUloge,
+        grupisiUloge: grupisiUloge,
+        formatirajTekst: formatirajTekst
     }
 };

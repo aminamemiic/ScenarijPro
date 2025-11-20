@@ -136,12 +136,20 @@ hr {
     border-top: 1px #333;
 }
 
-.desna-kolona {
+.desno {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     min-width: 0;
     min-height: calc(100vh - 60px);
+}
+
+.dugmad-poruke {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
+    margin: 0 60px;
 }
 
 .metode  {
@@ -150,6 +158,17 @@ hr {
     gap: 10px;
     padding-top: 10px;
     padding-bottom: 5px;
+}
+
+#output {
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+    font-family: "Courier New", Courier, monospace;
+    margin-top: 10px;
 }
 
 .metode button {
