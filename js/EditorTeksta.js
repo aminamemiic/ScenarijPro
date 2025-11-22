@@ -55,6 +55,39 @@ let EditorTeksta = function(divRef) {
         return rijeci;
     }
 
+    let jeLiNaslov = function(naslov) {
+        let linija = naslov.trim();
+        
+        // da li je prazna linija
+        if (linija.length === 0) {
+            return false;
+        }
+        
+        // da li je napisano velikim slovima
+        if (linija !== linija.toUpperCase()) {
+            return false;
+        }
+        
+        // da li počinje sa INT. ili EXT.
+        if (!linija.startsWith("INT.") && !linija.startsWith("EXT.")) {
+            return false;
+        }
+        
+        // da li sadrži " - "
+        if (!linija.includes(" - ")) {
+            return false;
+        }
+        
+        // da li završava sa jednim od vremena
+        if (linija.endsWith(" DAY") || linija.endsWith(" NIGHT") || 
+            linija.endsWith(" AFTERNOON") || linija.endsWith(" MORNING") || 
+            linija.endsWith(" EVENING")) {
+            return true;
+        }
+        
+        return false;
+    }
+
     let provjeriCijeluRijec = function(node, rijec) {
         let tekst = node.textContent;
         return tekst.includes(rijec);
@@ -185,7 +218,127 @@ let EditorTeksta = function(divRef) {
     }
 
     let scenarijUloge =function(uloga) {
+        uloga = uloga.toUpperCase();
+        let rezultat = [];
+        let linije = editor.innerText.split('\n');
 
+        let trenutnaScena = "";
+        let pozicijaUReplici = 0;
+
+        let replike = [];
+
+        let i = 0;
+        while (i < linije.length) {
+            let linija = linije[i].trim();
+
+            if (jeLiNaslov(linija)) {
+                trenutnaScena = linija;
+                pozicijaUReplici = 0;
+                i++;
+                continue;
+            }
+
+            if (/^[A-Z\s]+$/.test(linija) && linija.length > 0 && /[A-Z]/.test(linija)) {
+                let imeUloge = linija;
+                let linijeGovora = [];
+                let j = i + 1;
+
+                while (j < linije.length) {
+                    let govornaLinija = linije[j].trim();
+
+                    //prazna linija
+                    if (govornaLinija === "") {
+                        break;
+                    }
+
+                    //nova uloga
+                    if (/^[A-Z\s]+$/.test(govornaLinija) && govornaLinija.length > 0 && /[A-Z]/.test(govornaLinija)) {
+                        break;
+                    }
+
+                    //naslov scene 
+                    if (jeLiNaslov(govornaLinija)) {
+                        break;
+                    }
+
+                    //liinije u zagradama preskacemo
+                    if (govornaLinija.startsWith("(") && govornaLinija.endsWith(")")) {
+                        j++;
+                        continue;
+                    }
+
+                    linijeGovora.push(govornaLinija);
+                    j++;
+                }
+
+                //ako ima linija govora onda je validna replika
+                if (linijeGovora.length > 0) {
+                    pozicijaUReplici++;
+                    
+                    replike.push({
+                        uloga: imeUloge,
+                        linije: linijeGovora,
+                        scena: trenutnaScena,
+                        pozicija: pozicijaUReplici
+                    });
+                }
+
+                i = j;
+                continue;
+            }
+
+            i++;
+        }
+
+        //prolazimo kroz replike i trazimo one koje odgovaraju zadatoj ulozi
+        for (let i = 0; i < replike.length; i++) {
+            let trenutnaReplika = replike[i];
+
+            if (trenutnaReplika.uloga === uloga) {
+                let prethodnaReplika = null;
+                let sljedecaReplika = null;
+
+                //trazimo prethodnu repliku
+                if (i > 0) {
+                    let kandidat = replike[i - 1];
+
+                    if (kandidat.scena === trenutnaReplika.scena) {
+                        if (kandidat.pozicija === trenutnaReplika.pozicija - 1) {
+                            prethodnaReplika = {
+                                uloga: kandidat.uloga,
+                                linije: kandidat.linije
+                            };
+                        }
+                    }
+                }
+
+                //trazimo sljedecu repliku
+                if (i < replike.length - 1) {
+                    let kandidat = replike[i + 1];
+
+                    if (kandidat.scena === trenutnaReplika.scena) {
+                        if (kandidat.pozicija === trenutnaReplika.pozicija + 1) {
+                            sljedecaReplika = {
+                                uloga: kandidat.uloga,
+                                linije: kandidat.linije
+                            };
+                        }
+                    }
+                }
+
+                rezultat.push({
+                    scena: trenutnaReplika.scena,
+                    pozicijaUTekstu: trenutnaReplika.pozicija,
+                    prethodnaReplika: prethodnaReplika,
+                    trenutnaReplika: {
+                        uloga: trenutnaReplika.uloga,
+                        linije: trenutnaReplika.linije
+                    },
+                    sljedecaReplika: sljedecaReplika
+                });
+            }
+        }
+        return rezultat;
     }
 
     let grupisiUloge = function() {

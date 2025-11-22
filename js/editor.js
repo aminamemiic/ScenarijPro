@@ -47,6 +47,52 @@ function prikaziBrojLinija() {
     }
 }
 
+function prikaziScenarijUloge() {
+    let selektovaniTekst = dajSelektovaniTekst();
+    
+    if (!selektovaniTekst) {
+        output.value = "Molimo prvo selektujte (označite) ime uloge u editoru.";
+        return;
+    }
+    
+    let uloga = selektovaniTekst.toUpperCase();
+    let scenarij = editor.scenarijUloge(uloga);
+    
+    if (scenarij.length === 0) {
+        output.value = `Uloga "${uloga}" nije pronađena.`;
+        return;
+    }
+    
+    let ispis = `Scenarij uloge ${uloga}:\n\n`;
+    
+    for (let i = 0; i < scenarij.length; i++) {
+        let stavka = scenarij[i];
+        ispis += `--- Replika ${i + 1} ---\n`;
+        ispis += `Scena: ${stavka.scena || '(nema naslova)'}\n`;
+        ispis += `Pozicija: ${stavka.pozicijaUTekstu}\n`;
+        
+        if (stavka.prethodnaReplika) {
+            ispis += `Prethodni: Uloga: ${stavka.prethodnaReplika.uloga}\n
+                                Linije: ${stavka.prethodnaReplika.linije.join(' ')}\n`;
+        } else {
+            ispis += `Prethodni: (nema)\n`;
+        }
+        
+        ispis += `Trenutni govor: ${stavka.trenutnaReplika.linije.join(' ')}\n`;
+        
+        if (stavka.sljedecaReplika) {
+            ispis += `Sljedeći: Uloga: ${stavka.sljedecaReplika.uloga}\n
+                                Linije: ${stavka.sljedecaReplika.linije.join(' ')}\n`;
+        } else {
+            ispis += `Sljedeći: (nema)\n`;
+        }
+        
+        ispis += '\n';
+    }
+    
+    output.value = ispis;
+}
+
 function grupisiUloge() {
     let grupiranje = editor.grupisiUloge();
     let ispis = [];
