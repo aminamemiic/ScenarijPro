@@ -88,10 +88,33 @@ let EditorTeksta = function(divRef) {
         return false;
     }
 
-    let provjeriCijeluRijec = function(node, rijec) {
-        let tekst = node.textContent;
-        return tekst.includes(rijec);
-    };
+    let jeLiAkcijskiSegment = function(linija) {
+        // da li je prazna linija
+        if (linija === "") {
+            return false;
+        }
+
+        // da li je napisana velikim slovima 
+        if (linija === linija.toUpperCase()) {
+            return false;
+        }
+
+        // da li je naslov scene
+        if (jeLiNaslov(linija)) {
+            return false;
+        }
+
+        if (/[a-z]/.test(linija)) {
+            return false;
+        }
+
+        // da li je linija u zagradama 
+        if (linija.startsWith("(") && linija.endsWith(")")) {
+            return false;
+        }
+
+        return true;
+    }
 
     //implementacija metoda
     let dajBrojRijeci = function() {
@@ -342,7 +365,110 @@ let EditorTeksta = function(divRef) {
     }
 
     let grupisiUloge = function() {
+        let linije = editor.innerText.split('\n');
+        let rezultat = [];
 
+        let trenutnaScena = "";
+        let segmentUSceni = 0;
+        let uloge = new Set();
+        let uDijalogu = false;
+
+        let sacuvajSegment = function() {
+            if (trenutnaScena !== "" && uloge.size > 0) {
+                rezultat.push({
+                    scena: trenutnaScena,
+                    segment: segmentUSceni,
+                    uloge: Array.from(uloge)
+                });
+            }
+            uloge.clear();
+        }
+
+        let i = 0;
+        while (i < linije.length) {
+            let linija = linije[i].trim();
+
+            if (jeLiNaslov(linija)) {
+                sacuvajSegment();
+
+                trenutnaScena = linija;
+                segmentUSceni = 0;
+                uDijalogu = false;
+                i++;
+                continue;
+            }
+
+            if (jeLiAkcijskiSegment(linija)) { 
+                if (uDijalogu) {
+                    sacuvajSegment();
+                    uDijalogu = false;
+                }
+
+                i++;
+                continue;
+            }
+
+            if (/^[A-Z\s]+$/.test(linija) && linija.length > 0 && /[A-Z]/.test(linija)) {
+                let imeUloge = linija;
+
+                let validanGovor = false;
+                let j = i + 1;
+                while (j < linije.length) {
+                    let govornaLinija = linije[j].trim();
+
+                    //prazna linija
+                    if (govornaLinija === "") {
+                        break;
+                    }
+
+                    // nova uloga
+                    if (/^[A-Z\s]+$/.test(govornaLinija) && govornaLinija.length > 0 && /[A-Z]/.test(govornaLinija)) {  
+                        break;
+                    }
+
+                    // naslov scene 
+                    if (jeLiNaslov(govornaLinija)) {
+                        break;
+                    }
+
+                    // akcijski segment
+                    if (jeLiAkcijskiSegment(govornaLinija)) {
+                        break;
+                    }
+
+                    // linija u zagradama 
+                    if (govornaLinija.startsWith("(") && govornaLinija.endsWith(")")) {
+                        j++;
+                        continue;
+                    }
+
+                    validanGovor = true;
+                    j++;
+                }
+
+                //dodajemo ulogu ako ima validnu repliku
+                if (validanGovor) {
+                    if (!uDijalogu) {
+                        segmentUSceni++;
+                        uDijalogu = true;
+                    }
+                    uloge.add(imeUloge);
+                }
+
+                i = j;
+                continue; 
+            }
+
+            if (linija === "") {
+                i++;
+                continue;
+            }
+
+            i++;
+        }
+        sacuvajSegment();
+
+        return rezultat;
     }
 
     let formatirajTekst = function(komanda) {

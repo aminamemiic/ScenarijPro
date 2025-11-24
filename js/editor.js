@@ -93,15 +93,23 @@ function prikaziScenarijUloge() {
     output.value = ispis;
 }
 
-function grupisiUloge() {
+function prikaziGrupisaneUloge() {
     let grupiranje = editor.grupisiUloge();
-    let ispis = [];
     
-    for (let uloga in grupiranje) {
-        ispis.push(`${uloga}: ${grupiranje[uloga].brojLinija} linija`);
+    if (grupiranje.length === 0) {
+        output.value = "Nema pronađenih dijalog-segmenata.";
+        return;
     }
     
-    output.value = ispis.join('\n');
+    let ispis = `Pronađeno ${grupiranje.length} dijalog-segment(a):\n\n`;
+    
+    for (let grupa of grupiranje) {
+        ispis += `Scena: ${grupa.scena || '(bez naslova)'}\n`;
+        ispis += `Segment: ${grupa.segment}\n`;
+        ispis += `Uloge: ${grupa.uloge.join(', ')}\n\n`;
+    }
+    
+    output.value = ispis;
 }
 
 function formatiraj(komanda) {
