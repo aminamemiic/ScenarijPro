@@ -12,48 +12,67 @@ let EditorTeksta = function(divRef) {
     let editor = divRef;
 
     //pomocne metode
-    let ekstraktujTekst = function(node, formatiranje) {
-    //node je trenutni cvor u dom stablu, formatiranje je objekat koji prati trenutno stanje formatiranja
-    //vraca niz objekata gdje je svaki objekat rijec sa informacijom o formatiranju
-
-        let rijeci = [];
+    let ekstraktujTekst = function(node, formatiranje, state) {
+        if (!state) {
+            state = {
+                cur: "",
+                curBold: true,   
+                curItalic: true, 
+                words: []
+            };
+        }
 
         if (node.nodeType === Node.TEXT_NODE) {
-        //TEXT_NODE je cisti tekst bez tagova
-            let tekst = node.textContent;  //uzima cisti tekst bez tagova
-            let dijelovi = tekst.split(/[\s,.]+/);  //dijeljenje teksta: \s bilo koji whitespace , zarez . tacka + jedan ili vise takvih znakova zaredom
+            const tekst = node.textContent;
+            for (let ch of tekst) {
 
-            for(let dio of dijelovi) {
-                dio = dio.trim(); //uklanja razmake sa pocetka i kraja stringa
-
-                if (dio && /[a-zA-Z]/.test(dio)) { //provjera je li string prazan i regex da li sadrzi barem jedno slovo, test vraca true ako se pronadje barem jedno slovo
-                    rijeci.push({
-                        tekst: dio,
-                        bold: formatiranje.bold,
-                        italic: formatiranje.italic
-                    }); //kreira se objekat sa rijecju i trenutnim stanjem bold i italic
+                if (/\s|[.,]/.test(ch)) {
+                    if (state.cur.length > 0 && /[A-Za-z]/.test(state.cur)) {
+                        state.words.push({
+                            tekst: state.cur,
+                            bold: state.curBold,
+                            italic: state.curItalic
+                        });
+                    }
+                    state.cur = "";
+                    state.curBold = true;
+                    state.curItalic = true;
+                    continue;
                 }
-            }
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-        //ELEMENT_NODE je html element, u ovom slucaju <b> i <i>
-            let novoFormatiranje = { ...formatiranje }; //... pravi plitku kopiju
 
-            if (node.tagName === 'B' || node.tagName === 'STRONG') { //<b> i <strong> bold tagovi
-                novoFormatiranje.bold = true; //postavlja bold flag u novom formatiranju na true
+                state.cur += ch;
+
+                // karakter pripada boldu samo ako čitav token ima bold
+                if (!formatiranje.bold) state.curBold = false;
+                if (!formatiranje.italic) state.curItalic = false;
             }
-            if (node.tagName === 'I' || node.tagName === 'EM') { //<i> i <em> italik tagovi
-                novoFormatiranje.italic = true; //postavlja italik flag u novom formatiranju na true
-            }
+
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            let novo = { ...formatiranje };
+
+            const tag = node.tagName.toUpperCase();
+            if (tag === "B" || tag === "STRONG") novo.bold = true;
+            if (tag === "I" || tag === "EM") novo.italic = true;
 
             for (let child of node.childNodes) {
-                rijeci = rijeci.concat(ekstraktujTekst(child, novoFormatiranje));
-                //childNodes je kolekcija sve djece trenutnog elementa i za svako dijete se poziva ista funkcija
-                //concat spaja sve nizove objekata
+                ekstraktujTekst(child, novo, state);
             }
         }
 
-        return rijeci;
-    }
+        if (!arguments[2]) {
+            if (state.cur.length > 0 && /[A-Za-z]/.test(state.cur)) {
+                state.words.push({
+                    tekst: state.cur,
+                    bold: state.curBold,
+                    italic: state.curItalic
+                });
+            }
+            return state.words;
+        }
+
+        return state;
+    };
+
 
     let jeLiNaslov = function(naslov) {
         let linija = naslov.trim();
@@ -141,12 +160,16 @@ let EditorTeksta = function(divRef) {
     };
 
     let dajUloge = function() {
-        let linije = editor.innerText.split('\n');
+        const _tekstEditor = divRef.innerText || divRef.textContent;
+        const redovi = _tekstEditor.trim().split('\n');
         let uloge = new Set();
 
-        for (let i = 0; i < linije.length - 1; i++) {
-            if(/^[A-Z]+$/.test(linije[i].trim()) && linije[i+1].trim() != '') {
-                uloge.add(linije[i].trim());
+        for (let i = 0; i < redovi.length - 1; i++) {
+            if(/^[A-Z\s]+$/.test(redovi[i].trim()) && redovi[i+1].trim() != '') {
+                if (redovi[i+1].trim().startsWith('(') && i + 2 < redovi.length && redovi[i+2].trim() == '') {
+                    continue;
+                }
+                uloge.add(redovi[i].trim());
             }
         }
 
@@ -178,10 +201,6 @@ let EditorTeksta = function(divRef) {
         }
 
         let brojRazlika = function(s1, s2) {
-            if (s1.length !== s2.length) {
-                return Infinity; 
-            }
-            
             let razlike = 0;
             for (let i = 0; i < s1.length; i++) {
                 if (s1[i] !== s2[i]) {
@@ -192,8 +211,6 @@ let EditorTeksta = function(divRef) {
         };
 
         let suVrloSlicna = function(ime1, ime2) {
-            if (ime1 === ime2) return false; 
-            
             let razlika = brojRazlika(ime1, ime2);
             
             if (ime1.length > 5 && ime2.length > 5) {
@@ -232,7 +249,8 @@ let EditorTeksta = function(divRef) {
             if (linije[i].trim() === uloga && linije[i + 1].trim() !== '') {
                 for (let j = i + 1; j < linije.length; j++) {
                     if (linije[j].trim() === '') break;
-                    if (linije[j].trim().charAt(0) != '(') brojLinija++;
+                    if (linije[j].trim().charAt(0) == '(' && linije[j].endsWith(')')) continue;
+                    brojLinija++;
                 }
             }
         }
@@ -352,12 +370,12 @@ let EditorTeksta = function(divRef) {
                 rezultat.push({
                     scena: trenutnaReplika.scena,
                     pozicijaUTekstu: trenutnaReplika.pozicija,
-                    prethodnaReplika: prethodnaReplika,
-                    trenutnaReplika: {
+                    prethodni: prethodnaReplika,
+                    trenutni: {
                         uloga: trenutnaReplika.uloga,
                         linije: trenutnaReplika.linije
                     },
-                    sljedecaReplika: sljedecaReplika
+                    sljedeci: sljedecaReplika
                 });
             }
         }
@@ -398,7 +416,8 @@ let EditorTeksta = function(divRef) {
                 continue;
             }
 
-            if (jeLiAkcijskiSegment(linija)) { 
+            // Provjeri je li akcijski segment
+            if (linija !== "" && !jeLiNaslov(linija) && !linija.startsWith("(")  && /^[A-Za-z\s]+$/.test(linija) && i < linije.length && linije[i+1] === "") { 
                 if (uDijalogu) {
                     sacuvajSegment();
                     uDijalogu = false;
@@ -472,8 +491,28 @@ let EditorTeksta = function(divRef) {
     }
 
     let formatirajTekst = function(komanda) {
-        document.execCommand(komanda, false, null);
-        editor.focus();
+        const validneKomande = ['bold', 'italic', 'underline'];
+    
+        // Provjeri da li je komanda validna
+        if (!validneKomande.includes(komanda)) {
+            return false;
+        }
+        
+        // Provjeri da li postoji selekcija
+        let selection = window.getSelection();
+        if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+            return false;
+        }
+        
+        try {
+            let success = document.execCommand(komanda, false, null);
+            if (success) {
+                editor.focus();
+            }
+            return success;
+        } catch (error) {
+            return false;
+        }
     }
 
     //povratne vrijednosti
