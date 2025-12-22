@@ -13,6 +13,7 @@ const lineLocks = {};
 // ključ: userId → vrijednost: "scenarioId-lineId"
 const userLocks = {};
 
+// ključ: "characterName" → vrijednost: userId
 const characterLocks = {};
 
 
@@ -94,13 +95,40 @@ app.post("/api/scenarios/:scenarioId/lines/:lineId/lock", (req, res) => {
     });
 });
 
-// treca ruta
+// treca ruta 1
 
-// cetvrta ruta
+// cetvrta ruta 
+app.post("/api/scenarios/:scenarioId/characters/lock", (req, res) => {
+    const scenarioID = req.params.scenarioId;
+    const userID = req.body.userId;
+    const character = req.body.characterName;
 
-// peta ruta
+    if (characterLocks[character]) {
+        return res.status(409).json({
+            message: "Konflikt! Ime lika je vec zakljucano!"
+        });
+    }
 
-// sesta ruta
+    const filePath = path.join(__dirname, "data", "scenarios", `scenario-${scenarioID}.json`);
+
+    if(!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            message: "Scenario ne postoji!"
+        });
+    }
+
+    characterLocks[character] = userID;
+    res.status(200).json({
+        message: "Ime lika je uspjesno zakljucano!"
+    });
+});
+
+// peta ruta 2
+app.post("/api/scenarios/:scenarioId/characters/update", (req, res) => {
+
+});
+
+// sesta ruta 3
 
 // sedma ruta
 app.get("/api/scenarios/:scenarioId", (req, res) => {
