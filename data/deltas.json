@@ -1,0 +1,34 @@
+[
+  {
+    "scenarioId": 2,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 2,
+    "content": "a",
+    "timestamp": 1766527935
+  },
+  {
+    "scenarioId": 2,
+    "type": "line_update",
+    "lineId": 2,
+    "nextLineId": null,
+    "content": "m",
+    "timestamp": 1766527935
+  },
+  {
+    "scenarioId": 2,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 3,
+    "content": "a",
+    "timestamp": 1766527966
+  },
+  {
+    "scenarioId": 2,
+    "type": "line_update",
+    "lineId": 3,
+    "nextLineId": 2,
+    "content": "m",
+    "timestamp": 1766527966
+  }
+]

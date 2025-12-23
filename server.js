@@ -96,6 +96,134 @@ app.post("/api/scenarios/:scenarioId/lines/:lineId/lock", (req, res) => {
 });
 
 // treca ruta 1
+app.put("/api/scenarios/:scenarioId/lines/:lineId", (req, res) => {
+    const scenarioID = req.params.scenarioId;
+    const lineID = req.params.lineId;
+    const userID = req.body.userId;
+    const tekst = req.body.newText;
+
+    if (tekst.length === 0) {
+        return res.status(400).json({
+            message: "Niz new_text ne smije biti prazan!"
+        });
+    }
+
+    const filePath = path.join(__dirname, "data", "scenarios", `scenario-${scenarioID}.json`);
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            message: "Scenario ne postoji!"
+        });
+    }
+
+    const scenarij = JSON.parse(fs.readFileSync(filePath));
+    let indeks = -1;
+    let sljedeca = -1;
+    for (let i = 0; i < scenarij.content.length; i++) {
+        if (scenarij.content[i].lineId == lineID) {
+            indeks = i;
+            sljedeca = scenarij.content[i].nextLineId;
+        }
+    }
+
+    if (indeks === -1) {
+        return res.status(404).json({
+            message: "Linija ne postoji!"
+        });
+    }
+
+    const key = `${scenarioID}-${lineID}`;
+
+    if(!lineLocks[key]) {
+        return res.status(409).json({
+            message: "Linija nije zakljucana!" 
+        });
+    }
+
+    if(lineLocks[key] != userID) {
+        return res.status(409).json({
+            message: "Linija je vec zakljucana!"
+        });
+    }
+    
+    // azuriranje podataka
+    let maxLineId = 0;
+    for (let line of scenarij.content) {
+        if (parseInt(line.lineId) > maxLineId) {
+            maxLineId = parseInt(line.lineId);
+        }
+    }
+    let noveLinije = [];
+    for (let lines of tekst) {
+        lines = lines.split(/\s+/);
+        for (let i = 0; i < lines.length; i++) {
+            let linijaZaDodati = "";
+            let j = 0
+            while (j < 20 && i < lines.length) {
+                linijaZaDodati += (lines[i]+" ");
+                if (/[a-zA-Z]/.test(lines[i])) j++;
+                i++;
+            }
+            noveLinije.push({
+                lineId: (noveLinije.length == 0) ? parseInt(lineID) : ++maxLineId,
+                nextLineId: null,
+                text: linijaZaDodati
+            });
+        }
+    }
+
+    noveLinije[noveLinije.length-1].nextLineId = sljedeca;
+    for (let i = 0; i < noveLinije.length-1; i++) {
+        noveLinije[i].nextLineId = noveLinije[i+1].lineId;
+    }
+
+    scenarij.content[indeks] = noveLinije[0];
+
+    for (let i = 1; i < noveLinije.length; i++) {
+        scenarij.content.push({
+            lineId: noveLinije[i].lineId,
+            nextLineId: noveLinije[i].nextLineId,
+            text: noveLinije[i].text.trim()
+        });
+    }
+
+    const noviScenarij = {
+        id: scenarij.id,
+        title: scenarij.title,
+        content: scenarij.content
+    }
+    fs.writeFileSync(filePath, JSON.stringify(noviScenarij, null, 2));
+
+    // otkljucavanje linije
+    delete lineLocks[key];
+    delete userLocks[userID];
+
+    // log
+    const deltasPath = path.join(__dirname, "data", "deltas.json");
+    let deltas = [];
+    if (fs.existsSync(deltasPath)) {
+        deltas = JSON.parse(fs.readFileSync(deltasPath));
+    }
+
+    const timestamp = Math.floor(Date.now() / 1000);
+
+    for (let linija of noveLinije) {
+        deltas.push({
+            scenarioId: parseInt(scenarioID),
+            type: "line_update",
+            lineId: parseInt(linija.lineId),
+            nextLineId: linija.nextLineId !== null ? parseInt(linija.nextLineId) : null,
+            content: linija.text.trim(),
+            timestamp: timestamp
+        });
+    }
+
+    fs.writeFileSync(deltasPath, JSON.stringify(deltas, null, 2));
+
+    res.status(200).json({
+        message: "Linija je uspjesno azurirana!"
+    });
+});
 
 // cetvrta ruta 
 app.post("/api/scenarios/:scenarioId/characters/lock", (req, res) => {

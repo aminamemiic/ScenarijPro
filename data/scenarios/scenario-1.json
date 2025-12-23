@@ -4,8 +4,38 @@
   "content": [
     {
       "lineId": 1,
+      "nextLineId": 3,
+      "text": "Ovo je novi tekst linije Ovo je novi tekst linije Ovo je novi tekst linije Ovo je novi tekst linije "
+    },
+    {
+      "lineId": 3,
+      "nextLineId": 4,
+      "text": "je novi tekst linije Ovo je novi tekst linije Ovo je novi tekst linije Ovo je novi tekst linije Ovo"
+    },
+    {
+      "lineId": 4,
+      "nextLineId": 10,
+      "text": "a "
+    },
+    {
+      "lineId": 6,
+      "nextLineId": 7,
+      "text": "je"
+    },
+    {
+      "lineId": 7,
+      "nextLineId": 8,
+      "text": "novi"
+    },
+    {
+      "lineId": 8,
       "nextLineId": null,
-      "text": ""
+      "text": "tekst"
+    },
+    {
+      "lineId": 10,
+      "nextLineId": 6,
+      "text": "m"
     }
   ]
 }
