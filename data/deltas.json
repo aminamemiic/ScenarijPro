@@ -30,5 +30,20 @@
     "nextLineId": 2,
     "content": "m",
     "timestamp": 1766527966
+  },
+  {
+    "scenarioId": 2,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 3,
+    "content": "ALICE",
+    "timestamp": 1766532621
+  },
+  {
+    "scenarioId": 2,
+    "type": "char_rename",
+    "oldName": "ALICE",
+    "newName": "ALICIA",
+    "timestamp": 1766533151
   }
 ]

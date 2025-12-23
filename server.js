@@ -95,7 +95,7 @@ app.post("/api/scenarios/:scenarioId/lines/:lineId/lock", (req, res) => {
     });
 });
 
-// treca ruta 1
+// treca ruta 
 app.put("/api/scenarios/:scenarioId/lines/:lineId", (req, res) => {
     const scenarioID = req.params.scenarioId;
     const lineID = req.params.lineId;
@@ -251,12 +251,120 @@ app.post("/api/scenarios/:scenarioId/characters/lock", (req, res) => {
     });
 });
 
-// peta ruta 2
+// peta ruta 
 app.post("/api/scenarios/:scenarioId/characters/update", (req, res) => {
+    const scenarioID = req.params.scenarioId;
+    const userID = req.body.userId;
+    const staro = req.body.oldName;
+    const novo = req.body.newName;
 
+    const filePath = path.join(__dirname, "data", "scenarios", `scenario-${scenarioID}.json`);
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            message: "Scenario ne postoji!"
+        });
+    }
+
+    const scenario = JSON.parse(fs.readFileSync(filePath));
+
+    if (!characterLocks[staro]) {
+        return res.status(409).json({
+            message: "Ime lika nije zakljucano!"
+        });
+    }
+
+    if (characterLocks[staro] !== userID) {
+        return res.status(409).json({
+            message: "Konflikt! Ime lika je vec zakljucano!"
+        });
+    }
+
+    for (let line of scenario.content) {
+        if (line.text.includes(staro)) {
+            line.text = line.text.split(staro).join(novo);
+        }
+    }
+
+    delete characterLocks[staro];
+
+    const deltasPath = path.join(__dirname, "data", "deltas.json");
+    let deltas = [];
+
+    if (fs.existsSync(deltasPath)) {
+        const raw = fs.readFileSync(deltasPath, "utf-8");
+        deltas = raw.trim() ? JSON.parse(raw) : [];
+    }
+
+    deltas.push({
+        scenarioId: parseInt(scenarioID),
+        type: "char_rename",
+        oldName: staro,
+        newName: novo,
+        timestamp: Math.floor(Date.now() / 1000)
+    });
+
+    fs.writeFileSync(deltasPath, JSON.stringify(deltas, null, 2));
+
+    fs.writeFileSync(filePath, JSON.stringify(scenario, null, 2));
+
+    res.status(200).json({
+        message: "Ime lika je uspjesno promijenjeno!"
+    });
 });
 
-// sesta ruta 3
+// sesta ruta 
+app.get("/api/scenarios/:scenarioId/deltas", (req, res) => {
+    const scenarioID = req.params.scenarioId;
+    const since = parseInt(req.query.since);
+    
+    const filePath = path.join(__dirname, "data", "scenarios", `scenario-${scenarioID}.json`);
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            message: "Scenario ne postoji!"
+        });
+    }
+
+    const deltasPath = path.join(__dirname, "data", "deltas.json");
+    let deltas = [];
+    if (fs.existsSync(deltasPath)) {
+        deltas = JSON.parse(fs.readFileSync(deltasPath));
+    }
+
+    let retDeltas = [];
+    let found = false;
+    for (let delta of deltas) {
+        if (delta.scenarioId == scenarioID && delta.timestamp > since) {
+            found = true;
+            if (delta.type == "line_update") {
+                retDeltas.push({
+                    type: "line_update",
+                    lineId: delta.id,
+                    nextLineId: delta.nextLineId,
+                    content: delta.content,
+                    timestamp: delta.timestamp
+                });
+            }
+            else {
+                retDeltas.push({
+                    type: "char_rename",
+                    oldName: delta.oldName,
+                    newName: delta.newName,
+                    timestamp: delta.timestamp
+                });
+            }
+        }
+    }
+
+    if (!found) {
+        return res.status(404).json({
+            message: "Scenario ne postoji!"
+        });
+    }
+
+    res.status(200).json({
+        deltas: retDeltas
+    });
+});
 
 // sedma ruta
 app.get("/api/scenarios/:scenarioId", (req, res) => {
