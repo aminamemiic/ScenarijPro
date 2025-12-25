@@ -131,7 +131,7 @@ function initScenario() {
         if (status === 200) {
             trenutniScenarioId = data.id;
             output.value = `Scenarij kreiran! ID: ${data.id}\nPočetna linija ID: 1`;
-            document.getElementById('scenarioInfo').textContent = `Scenarij ID: ${data.id}`;
+            document.getElementById('scenarioInfo').textContent = `Trenutno aktivan scenarij: Scenarij ID: ${data.id}`;
             
             setInterval(pollDeltas, 3000);
         } else {
@@ -153,7 +153,7 @@ function ucitajScenario() {
         if (status === 200) {
             trenutniScenarioId = data.id;
             document.querySelector('.naslov').textContent = data.title;
-            document.getElementById('scenarioInfo').textContent = `Scenarij ID: ${data.id}`;
+            document.getElementById('scenarioInfo').textContent = `Trenutno aktivan scenarij: Scenarij ID: ${data.id}`;
             
             // rekonstruisanje teksta
             let tekst = "";
