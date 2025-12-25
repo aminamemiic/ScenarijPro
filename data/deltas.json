@@ -45,5 +45,20 @@
     "oldName": "ALICE",
     "newName": "ALICIA",
     "timestamp": 1766533151
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 3,
+    "content": "amina",
+    "timestamp": 1766619154
+  },
+  {
+    "scenarioId": 1,
+    "type": "char_rename",
+    "oldName": "amina",
+    "newName": "Amina",
+    "timestamp": 1766619172
   }
 ]

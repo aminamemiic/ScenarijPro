@@ -286,3 +286,246 @@ hr {
         padding: 10px 5px;
     }
 }
+
+.backend-kontrole {
+    background: white;
+    padding: 20px;
+    margin: 20px 60px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', 'Inter', sans-serif;
+}
+
+.backend-naslov {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.scenario-info {
+    margin-bottom: 20px;
+    font-weight: 500;
+    color: #28a745;
+    padding: 12px;
+    background: #f0f9f4;
+    border-radius: 6px;
+    border-left: 4px solid #28a745;
+    font-size: 14px;
+}
+
+.backend-sekcija {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f5f6fa;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.backend-sekcija:last-child {
+    margin-bottom: 0;
+}
+
+.sekcija-naslov {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+.input-field {
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #333;
+    font-size: 14px;
+    font-family: 'Poppins', 'Inter', sans-serif;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-small {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.input-medium {
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-group .input-field {
+    flex: 1;
+    max-width: 150px;
+}
+
+.textarea-field {
+    width: calc(100% - 24px);
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #333;
+    font-size: 14px;
+    font-family: "Courier New", Courier, monospace;
+    resize: vertical;
+    min-height: 60px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.label {
+    display: block;
+    margin-bottom: 6px;
+    color: #555;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.label-top-margin {
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn-novi {
+    background: #28a745;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.btn-novi:hover:not(:disabled) {
+    background: #218838;
+}
+
+.btn-ucitaj {
+    background: #5B3FFF;
+    color: white;
+}
+
+.btn-ucitaj:hover:not(:disabled) {
+    background: #4a32cc;
+}
+
+.btn-zakljucaj {
+    background: #838383;
+    color: white;
+    margin-top: 5px;
+}
+
+.btn-zakljucaj:hover:not(:disabled) {
+    background: #555;
+}
+
+.btn-azuriraj {
+    background: #28a745;
+    color: white;
+    margin-top: 8px;
+}
+
+.btn-azuriraj:hover:not(:disabled) {
+    background: #218838;
+}
+
+.btn-preimenuj {
+    background: #5B3FFF;
+    color: white;
+    margin-top: 8px;
+}
+
+.btn-preimenuj:hover:not(:disabled) {
+    background: #4a32cc;
+}
+
+.backend-kontrole input:disabled {
+    background-color: #f0f0f0 !important;
+    color: #999 !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-color: #ddd;
+}
+
+.backend-kontrole button:disabled,
+.btn:disabled {
+    background-color: #ddd !important;
+    color: #999 !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+}
+
+.input-field:focus,
+.textarea-field:focus {
+    outline: none;
+    border-color: #5B3FFF;
+    box-shadow: 0 0 0 3px rgba(91, 63, 255, 0.1);
+}
+
+@media (max-width: 750px) {
+    .backend-kontrole {
+        margin: 20px 10px;
+        padding: 15px;
+    }
+    
+    .backend-sekcija {
+        padding: 12px;
+    }
+    
+    .backend-naslov {
+        font-size: 16px;
+    }
+    
+    .sekcija-naslov {
+        font-size: 14px;
+    }
+    
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .input-group .input-field {
+        max-width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .input-small,
+    .input-medium {
+        width: 100%;
+    }
+}
+
+.backend-kontrole .btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.backend-sekcija {
+    transition: box-shadow 0.2s ease;
+}
+
+.backend-sekcija:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

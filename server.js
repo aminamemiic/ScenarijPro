@@ -6,6 +6,17 @@ app.use(express.json());
 const fs = require("fs");
 const path = require("path");
 
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'writing.html'));
+});
+
+app.get('/writing.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'writing.html'));
+});
+
 // ključ: "scenarioId-lineId" → vrijednost: userId
 // npr linelocks["1-3"] === 5, znaci da je userId 5 zakljucao linijaId 3 u scenarioId 1
 const lineLocks = {};

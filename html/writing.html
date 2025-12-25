@@ -65,6 +65,54 @@
                 <textarea id="output" rows="4" cols="30" readonly></textarea>
             </div>
 
+            <div class="backend-kontrole">
+                <h3 class="backend-naslov">Upravljanje</h3>
+                <div id="scenarioInfo" class="scenario-info">Nema aktivnog scenarija</div>
+                
+                <div class="backend-sekcija">
+                    <h4 class="sekcija-naslov">Upravljanje Scenarijem</h4>
+                    <button onclick="initScenario()" class="btn btn-novi">
+                        Kreiraj novi scenarij
+                    </button>
+                    <div class="input-group">
+                        <input type="text" id="scenarioIdInput" class="input-field" placeholder="Unesite ID scenarija">
+                        <button onclick="ucitajScenario()" class="btn btn-ucitaj">
+                            Učitaj scenarij
+                        </button>
+                    </div>
+                </div>
+
+                <div class="backend-sekcija">
+                    <h4 class="sekcija-naslov">Uređivanje Linije</h4>
+                    <label class="label">ID Linije:</label>
+                    <input type="number" id="lineIdInput" class="input-field input-small" placeholder="npr. 1">
+                    <button id="zakljucajBtn" onclick="zakljucajLiniju()" class="btn btn-zakljucaj">
+                        Zaključaj liniju
+                    </button>
+                    
+                    <label class="label label-top-margin">Novi tekst (možete unijeti više linija):</label>
+                    <textarea id="noviTekstInput" class="textarea-field" placeholder="Unesite novi tekst za liniju..."></textarea>
+                    <button id="azurirajBtn" onclick="azurirajLiniju()" disabled class="btn btn-azuriraj">
+                        Ažuriraj liniju
+                    </button>
+                </div>
+
+                <div class="backend-sekcija">
+                    <h4 class="sekcija-naslov">Preimenovanje Karaktera</h4>
+                    <label class="label">Staro ime:</label>
+                    <input type="text" id="staroImeInput" class="input-field input-medium" placeholder="npr. ANNA">
+                    <button id="zakljucajKarakterBtn" onclick="zakljucajKarakter()" class="btn btn-zakljucaj">
+                        Zaključaj karakter
+                    </button>
+                    
+                    <label class="label label-top-margin">Novo ime:</label>
+                    <input type="text" id="novoImeInput" class="input-field input-medium" placeholder="npr. MARIA">
+                    <button id="preimenujBtn" onclick="preimenujKarakter()" disabled class="btn btn-preimenuj">
+                        Preimenuj karakter
+                    </button>
+                </div>
+            </div>
+
             <div id="divEditor" contenteditable="true" class="editor">
                 INT. KITCHEN - DAY
 
@@ -119,6 +167,7 @@
 
     </div>
 
+    <script src="/js/poziviAjaxFetch.js"></script>
     <script src="/js/EditorTeksta.js"></script>
     <script src="/js/editor.js"></script>
 </body>

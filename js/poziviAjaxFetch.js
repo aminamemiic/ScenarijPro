@@ -16,7 +16,7 @@ const PoziviAjax = (function() {
             );
         },
         lockLine: function(scenarioId, lineId, userId, callback) { 
-            fetch(`/    api/scenarios/${scenarioId}/lines/${lineId}/lock`, {
+            fetch(`/api/scenarios/${scenarioId}/lines/${lineId}/lock`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
