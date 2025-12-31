@@ -60,5 +60,108 @@
     "oldName": "amina",
     "newName": "Amina",
     "timestamp": 1766619172
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 11,
+    "content": "amina",
+    "timestamp": 1767136195
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 11,
+    "nextLineId": 3,
+    "content": "amina",
+    "timestamp": 1767136195
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 12,
+    "content": "a",
+    "timestamp": 1767136274
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 12,
+    "nextLineId": 13,
+    "content": "",
+    "timestamp": 1767136274
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 13,
+    "nextLineId": 11,
+    "content": "a",
+    "timestamp": 1767136274
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 14,
+    "content": "a",
+    "timestamp": 1767136820
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 14,
+    "nextLineId": 15,
+    "content": "",
+    "timestamp": 1767136820
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 15,
+    "nextLineId": 12,
+    "content": "m",
+    "timestamp": 1767136820
+  },
+  {
+    "scenarioId": 1,
+    "type": "line_update",
+    "lineId": 1,
+    "nextLineId": 14,
+    "content": "AMINA",
+    "timestamp": 1767140120
+  },
+  {
+    "scenarioId": 2,
+    "type": "char_rename",
+    "oldName": "ALICIA",
+    "newName": "HANA",
+    "timestamp": 1767140893
+  },
+  {
+    "scenarioId": 2,
+    "type": "line_update",
+    "lineId": 2,
+    "nextLineId": null,
+    "content": "ALICE",
+    "timestamp": 1767143186
+  },
+  {
+    "scenarioId": 2,
+    "type": "line_update",
+    "lineId": 2,
+    "nextLineId": null,
+    "content": "ALICE",
+    "timestamp": 1767143234
+  },
+  {
+    "scenarioId": 2,
+    "type": "char_rename",
+    "userId": 1,
+    "oldName": "ALICIA",
+    "newName": "HANA",
+    "timestamp": 1767143272
   }
 ]

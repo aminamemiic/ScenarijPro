@@ -155,22 +155,34 @@ function ucitajScenario() {
             document.querySelector('.naslov').textContent = data.title;
             document.getElementById('scenarioInfo').textContent = `Trenutno aktivan scenarij: Scenarij ID: ${data.id}`;
             
-            // rekonstruisanje teksta
-            let tekst = "";
-            let prvaLinija = data.content.find(l => l.lineId === 1);
-            let trenutna = prvaLinija;
+            div.innerHTML = "";
+            
+            let htmlSadrzaj = "";
             let linijeInfo = [];
             
-            while (trenutna) {
-                tekst += trenutna.text + "\n";
-                linijeInfo.push(`Line ${trenutna.lineId}: ${trenutna.text.substring(0, 30)}...`);
-                if (trenutna.nextLineId === null) break;
-                trenutna = data.content.find(l => l.lineId === trenutna.nextLineId);
+            if (data.content && Array.isArray(data.content)) {
+                let prvaLinija = data.content.find(l => l.lineId === 1);
+                let trenutna = prvaLinija;
+                
+                while (trenutna) {
+                    if (trenutna.text.trim() === "") {
+                        htmlSadrzaj += "&nbsp;<br>";
+                    } else {
+                        htmlSadrzaj += trenutna.text + "<br>";
+                    }
+                    
+                    linijeInfo.push(`Line ${trenutna.lineId}: ${trenutna.text.substring(0, 30)}`);
+                    
+                    if (trenutna.nextLineId === null) break;
+                    trenutna = data.content.find(l => l.lineId === trenutna.nextLineId);
+                }
+                
+                div.innerHTML = htmlSadrzaj;
+            } else {
+                div.innerText = "Scenarij je prazan.";
             }
             
-            div.innerHTML = tekst.trim().replace(/\n/g, '<br>');
             output.value = `Scenarij učitan! ID: ${data.id}\n\nDostupne linije:\n${linijeInfo.join('\n')}`;
-            
             posljednjiTimestamp = Math.floor(Date.now() / 1000);
         } else {
             output.value = `Greška: ${data.message || data.error}`;
@@ -224,7 +236,7 @@ function azurirajLiniju() {
     }
     
     // podijeli tekst na linije
-    const linije = noviTekst.split('\n').filter(l => l.trim() !== '');
+    const linije = noviTekst.split('\n');
     
     PoziviAjax.updateLine(trenutniScenarioId, trenutnoZakljucanaLinija, trenutniUserId, linije, (status, data) => {
         if (status === 200) {

@@ -218,16 +218,14 @@ app.put("/api/scenarios/:scenarioId/lines/:lineId", (req, res) => {
 
     const timestamp = Math.floor(Date.now() / 1000);
 
-    for (let linija of noveLinije) {
         deltas.push({
             scenarioId: parseInt(scenarioID),
             type: "line_update",
-            lineId: parseInt(linija.lineId),
-            nextLineId: linija.nextLineId !== null ? parseInt(linija.nextLineId) : null,
-            content: linija.text.trim(),
+            lineId: parseInt(noveLinije[0].lineId),
+            nextLineId: noveLinije[0].nextLineId !== null ? parseInt(noveLinije[0].nextLineId) : null,
+            content: noveLinije[0].text.trim(),
             timestamp: timestamp
         });
-    }
 
     fs.writeFileSync(deltasPath, JSON.stringify(deltas, null, 2));
 
@@ -249,6 +247,21 @@ app.post("/api/scenarios/:scenarioId/characters/lock", (req, res) => {
     }
 
     const filePath = path.join(__dirname, "data", "scenarios", `scenario-${scenarioID}.json`);
+
+    const scenario = JSON.parse(fs.readFileSync(filePath));
+    let karakterPostoji = false;
+    for (let line of scenario.content) {
+        if (line.text.includes(character)) {
+            karakterPostoji = true;
+            break;
+        }
+    }
+    
+    if (!karakterPostoji) {
+        return res.status(404).json({
+            message: "Ime lika ne postoji u scenariju!"
+        });
+    }
 
     if(!fs.existsSync(filePath)) {
         return res.status(404).json({
@@ -292,6 +305,20 @@ app.post("/api/scenarios/:scenarioId/characters/update", (req, res) => {
 
     for (let line of scenario.content) {
         if (line.text.includes(staro)) {
+            const key = `${scenarioID}-${line.lineId}`;
+            
+            if (lineLocks[key]) {
+                if (lineLocks[key] !== userID) {
+                    return res.status(409).json({
+                        message: "Konflikt! Linija koja sadrzi ime lika je zakljucana od strane drugog korisnika!"
+                    });
+                }
+            }
+        }
+    }
+
+    for (let line of scenario.content) {
+        if (line.text.includes(staro)) {
             line.text = line.text.split(staro).join(novo);
         }
     }
@@ -309,6 +336,7 @@ app.post("/api/scenarios/:scenarioId/characters/update", (req, res) => {
     deltas.push({
         scenarioId: parseInt(scenarioID),
         type: "char_rename",
+        userId: userID,
         oldName: staro,
         newName: novo,
         timestamp: Math.floor(Date.now() / 1000)
@@ -371,6 +399,8 @@ app.get("/api/scenarios/:scenarioId/deltas", (req, res) => {
             message: "Scenario ne postoji!"
         });
     }
+
+    retDeltas.sort((a, b) => a.timestamp - b.timestamp);
 
     res.status(200).json({
         deltas: retDeltas
