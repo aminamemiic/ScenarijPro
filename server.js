@@ -38,7 +38,21 @@ app.post("/api/scenarios", (req, res) => {
     const scenariosDir = path.join(__dirname, "data", "scenarios");
 
     const files = fs.readdirSync(scenariosDir);
-    const ID = files.length + 1;
+    let maxID = 0;
+    
+    for (let file of files) {
+        if (file.startsWith("scenario-") && file.endsWith(".json")) {
+            const idMatch = file.match(/scenario-(\d+)\.json/);
+            if (idMatch) {
+                const fileID = parseInt(idMatch[1]);
+                if (fileID > maxID) {
+                    maxID = fileID;
+                }
+            }
+        }
+    }
+    
+    const ID = maxID + 1;
 
     const scenarij = {
         id: ID,
