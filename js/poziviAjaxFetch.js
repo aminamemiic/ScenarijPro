@@ -1,4 +1,4 @@
-const PoziviAjax = (function() {
+const PoziviAjaxFetch = (function() {
     return {
         postScenario: function(title, callback) {
             fetch("/api/scenarios", {

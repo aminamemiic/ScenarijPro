@@ -192,7 +192,7 @@ app.put("/api/scenarios/:scenarioId/lines/:lineId", (req, res) => {
             noveLinije.push({
                 lineId: (noveLinije.length == 0) ? parseInt(lineID) : ++maxLineId,
                 nextLineId: null,
-                text: linijaZaDodati
+                text: linijaZaDodati.trim()
             });
         }
     }

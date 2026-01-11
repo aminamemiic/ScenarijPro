@@ -127,7 +127,7 @@ let trenutnoZakljucanaLinija = null;
 function initScenario() {
     const naslov = document.querySelector('.naslov').textContent;
     
-    PoziviAjax.postScenario(naslov, (status, data) => {
+    PoziviAjaxFetch.postScenario(naslov, (status, data) => {
         if (status === 200) {
             trenutniScenarioId = data.id;
             output.value = `Scenarij kreiran! ID: ${data.id}\nPočetna linija ID: 1`;
@@ -149,7 +149,7 @@ function ucitajScenario() {
         return;
     }
     
-    PoziviAjax.getScenario(scenarioId, (status, data) => {
+    PoziviAjaxFetch.getScenario(scenarioId, (status, data) => {
         if (status === 200) {
             trenutniScenarioId = data.id;
             document.querySelector('.naslov').textContent = data.title;
@@ -204,7 +204,7 @@ function zakljucajLiniju() {
         return;
     }
     
-    PoziviAjax.lockLine(trenutniScenarioId, lineId, trenutniUserId, (status, data) => {
+    PoziviAjaxFetch.lockLine(trenutniScenarioId, lineId, trenutniUserId, (status, data) => {
         if (status === 200) {
             trenutnoZakljucanaLinija = lineId;
             output.value = `Linija ${lineId} je uspješno zaključana!\nSada možete upisati novi tekst i kliknuti "Ažuriraj liniju".`;
@@ -238,7 +238,7 @@ function azurirajLiniju() {
     // podijeli tekst na linije
     const linije = noviTekst.split('\n');
     
-    PoziviAjax.updateLine(trenutniScenarioId, trenutnoZakljucanaLinija, trenutniUserId, linije, (status, data) => {
+    PoziviAjaxFetch.updateLine(trenutniScenarioId, trenutnoZakljucanaLinija, trenutniUserId, linije, (status, data) => {
         if (status === 200) {
             output.value = `Linija ${trenutnoZakljucanaLinija} uspješno ažurirana!\nLinija je automatski otključana.`;
             
@@ -276,7 +276,7 @@ function zakljucajKarakter() {
         return;
     }
     
-    PoziviAjax.lockCharacter(trenutniScenarioId, staroIme, trenutniUserId, (status, data) => {
+    PoziviAjaxFetch.lockCharacter(trenutniScenarioId, staroIme, trenutniUserId, (status, data) => {
         if (status === 200) {
             output.value = `Karakter "${staroIme}" je uspješno zaključan!\nSada unesite novo ime i kliknite "Preimenuj".`;
             document.getElementById('staroImeInput').disabled = true;
@@ -307,7 +307,7 @@ function preimenujKarakter() {
         return;
     }
     
-    PoziviAjax.updateCharacter(trenutniScenarioId, trenutniUserId, staroIme, novoIme, (status, data) => {
+    PoziviAjaxFetch.updateCharacter(trenutniScenarioId, trenutniUserId, staroIme, novoIme, (status, data) => {
         if (status === 200) {
             output.value = `Karakter "${staroIme}" uspješno preimenovan u "${novoIme}"!`;
             
@@ -332,7 +332,7 @@ function preimenujKarakter() {
 function pollDeltas() {
     if (!trenutniScenarioId) return;
     
-    PoziviAjax.getDeltas(trenutniScenarioId, posljednjiTimestamp, (status, data) => {
+    PoziviAjaxFetch.getDeltas(trenutniScenarioId, posljednjiTimestamp, (status, data) => {
         if (status === 200 && data.deltas && data.deltas.length > 0) {
             console.log("Primljene nove izmjene:", data.deltas);
             
