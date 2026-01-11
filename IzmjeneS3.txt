@@ -3,3 +3,6 @@
 2) Izmjena naziva funkcije PoziviAjaxFetch (stari naziv je bio PoziviAjax) unutar fajla PoziviAjaxFetch.js, zbog cega je bilo nuzno promijeniti svako pojavljivanje PoziviAjax u PoziviAjaxFetch unutar editor.js
 
 3) U server.js, u 3. ruti u liniji 195 je dodano samo .trim() kako se posljednji razmak nakon 20. rijeci u liniji ne bi brojao kao elemement niza kada se uradi .split(" "). Bez dodanog trim(), kada se u testu prelamanja 45 rijeci uradi line3.text.split(" ").length, dobije se rezultat ["riječ", ..., "riječ", ""], zbog cega mi je padao navedeni test, a u liniji je u sustini bilo tacno 20 rijeci. Dakle, nije nikakva izmjena logike implementacije rute, samo dodano .trim()
+
+Napomena za commits: 
+Nakon prvog commita, na bitbucket-u se nije promijenio naziv fajla PoziviAjaxFetch, pa sam radila drugi commit za privremeni naziv i onda treci commit za konacni naziv koji se onda ispravno prikazao na bitbucket-u.
