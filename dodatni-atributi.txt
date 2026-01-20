@@ -1,0 +1,2 @@
+Checkpoint:
+    userID: Integer, pracenje koji je user kreirao checkpoint

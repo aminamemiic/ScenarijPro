@@ -17,6 +17,9 @@ app.get('/writing.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'html', 'writing.html'));
 });
 
+const { Checkpoint, Scenario, Delta, Line } = require("/js/models");
+const { QueryTypes } = require("sequelize");
+
 // ključ: "scenarioId-lineId" → vrijednost: userId
 // npr linelocks["1-3"] === 5, znaci da je userId 5 zakljucao linijaId 3 u scenarioId 1
 const lineLocks = {};
@@ -434,7 +437,138 @@ app.get("/api/scenarios/:scenarioId", (req, res) => {
 
     const trazeniScenarij = JSON.parse(fs.readFileSync(filePath));
     res.status(200).json(trazeniScenarij);
-}) 
+}); 
+
+// 4. spirala
+// prva ruta
+app.post("/api/scenarios/:scenarioId/checkpoint", async (req, res) => {
+    try {
+        const scenarioId = parseInt(req.params.scenarioId);
+
+        const scenario = await Scenario.findByPk(scenarioId);
+        if (!scenario) {
+            return res.status(404).json({
+                message: "Scenario ne postoji!"
+            });
+        }
+
+        const timestamp = Math.floor(Date.now() / 1000);
+
+        await Checkpoint.create({
+            scenarioId: scenarioId,
+            timestamp: timestamp,
+            userId: req.body.userId
+        });
+
+        res.status(200).json({
+            message: "Checkpoint je uspjesno kreiran!"
+        });
+    } catch (error) {
+        console.error("Greska pri kreiranju checkpointa:", error);
+        res.status(500).json({
+            message: "Greska pri kreiranju checkpointa!"
+        });
+    }
+});
+
+// druga ruta
+app.get("/api/scenarios/:scenarioId/checkpoints", async (req, res) => {
+    try {
+        const scenarioId = parseInt(req.params.scenarioId);
+
+        const scenario = await Scenario.findByPk(scenarioId);
+        if (!scenario) {
+            return res.status(404).json({
+                message: "Scenario ne postoji!"
+            });
+        }
+
+        const checkpoints = await Checkpoint.findAll({
+            where: { scenarioId },
+            attributes: ["id", "timestamp"]
+        });
+
+        res.status(200).json(checkpoints);
+    } catch (error) {
+        console.error("Greska pri citanju checkpointa:", error);
+        res.status(500).json({
+            message: "Greska pri citanju checkpointa!"
+        });
+    }    
+});
+
+// treca ruta
+app.get("/api/scenarios/:scenarioId/restore/:checkpointId", async (req, res) => {
+    try {
+        const scenarioId = parseInt(req.params.scenarioId);
+        const checkpointId = parseInt(req.params.checkpointId);
+
+        const scenario = await Scenario.findByPk(scenarioId, {
+            include: [{model: Line}]
+        });
+        if (!scenario) {
+            return res.status(404).json({
+                message: "Scenario ne postoji!"
+            });
+        }
+
+        const checkpoint = await Checkpoint.findByPk(checkpointId);
+        if (!checkpoint || checkpoint.scenarioId != scenarioId) {
+            return res.status(404).json({
+                message: "Checkpoint ne postoji!"
+            });
+        }
+
+        const timestamp = checkpoint.timestamp;
+
+        const deltas = await sequelize.query('SELECT * FROM `Delta` WHERE timestamp <= ? ORDER BY timestamp ASC', {
+            replacements: [timestamp],
+            type: QueryTypes.SELECT
+        });
+
+        const restoredLines = scenario.Lines.map(line => ({
+            lineId: line.lineId,
+            nextLineId: line.nextLineId,
+            text: line.text
+        }));
+
+        for (let delta of deltas) {
+            if (delta.type === "line_update") {
+                const indeks = restoredLines.findIndex(l => l.lineId === delta.lineId); 
+                if (indeks !== -1) {
+                    restoredLines[indeks].text = delta.content;
+                    restoredLines[indeks].nextLineId = delta.nextLineId;
+                }
+                else {
+                    restoredLines.push({
+                        lineId: delta.lineId,
+                        nextLineId: delta.nextLineId,
+                        text: delta.content
+                    });
+                }
+            } else if (delta.type === "char_rename") {
+                for (let line of restoredLines) {
+                    if (line.text.includes(delta.oldName)) {
+                        line.text = line.text.split(delta.oldName).join(delta.newName);
+                    }
+                }
+            }
+        }
+
+        res.status(200).json({
+            id: scenario.id,
+            title: scenario.title,
+            content: restoredLines
+        });
+    } catch (error) {
+        console.error("Greska pri citanju checkpointa:", error);
+        res.status(500).json({
+            message: "Greska pri citanju checkpointa!"
+        });
+    } 
+});
+
+module.exports = app;
 
 const sequelize = require("./js/sequelize");
 require("./js/models");
