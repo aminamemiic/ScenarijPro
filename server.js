@@ -436,4 +436,23 @@ app.get("/api/scenarios/:scenarioId", (req, res) => {
     res.status(200).json(trazeniScenarij);
 }) 
 
+const sequelize = require("./js/sequelize");
+require("./js/models");
+
+(async () => {
+    try {
+        await sequelize.authenticate();
+        console.log("Konekcija sa bazom uspješna");
+
+        await sequelize.sync({ force: true });
+        console.log("Tabele su kreirane");
+
+        app.listen(3000, () => {
+            console.log("Server pokrenut na portu 3000");
+        });
+    } catch (err) {
+        console.error("Greška pri pokretanju servera:", err);
+    }
+})();
+
 app.listen(3000);
