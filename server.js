@@ -84,12 +84,14 @@ app.post("/api/scenarios/:scenarioId/lines/:lineId/lock", async (req, res) => {
             });
         }
 
-        const linija = await sequelize.query('SELECT * FROM `Line` WHERE lineId = ? AND scenarioId = ?', {
-            replacements: [lineID, scenarioID],
-            type: QueryTypes.SELECT
+        const linija = await Line.findOne({
+            where: {
+                scenarioId: scenarioID,
+                lineId: lineID
+            }
         });
 
-        if (linija.length === 0) {
+        if (!linija) {
             return res.status(404).json({
                 message: "Linija ne postoji!"
             });
@@ -590,6 +592,113 @@ app.get("/api/scenarios/:scenarioId/restore/:checkpointId", async (req, res) => 
 
 module.exports = app;
 
+async function initializeDatabase() {
+    // SCENARIO
+    const scenario = await Scenario.create({
+        id: 1,
+        title: "Potraga za izgubljenim ključem"
+    });
+
+    // LINES
+    await Line.bulkCreate([
+        {
+            scenarioId: 1,
+            lineId: 1,
+            nextLineId: 2,
+            text: "NARATOR: Sunce je polako zalazilo nad starim gradom."
+        },
+        {
+            scenarioId: 1,
+            lineId: 2,
+            nextLineId: 3,
+            text: "ALICE: Jesi li siguran da je ključ ostao u biblioteci?"
+        },
+        {
+            scenarioId: 1,
+            lineId: 3,
+            nextLineId: 4,
+            text: "BOB: To je posljednje mjesto gdje sam ga vidio prije nego što je pala noć."
+        },
+        {
+            scenarioId: 1,
+            lineId: 4,
+            nextLineId: 5,
+            text: "ALICE: Moramo požuriti prije nego što čuvar zaključa glavna vrata."
+        },
+        {
+            scenarioId: 1,
+            lineId: 5,
+            nextLineId: 6,
+            text: "BOB: Čekaj, čuješ li taj zvuk iza polica?"
+        },
+        {
+            scenarioId: 1,
+            lineId: 6,
+            nextLineId: null,
+            text: "NARATOR: Iz sjene se polako pojavila nepoznata figura."
+        }
+    ]);
+
+    // DELTAS
+    await Delta.bulkCreate([
+        {
+            scenarioId: 1,
+            type: "line_update",
+            lineId: 1,
+            nextLineId: 2,
+            content: "NARATOR: Sunce je polako zalazilo nad starim gradom.",
+            timestamp: 1736520000
+        },
+        {
+            scenarioId: 1,
+            type: "line_update",
+            lineId: 2,
+            nextLineId: 3,
+            content: "ALICE: Jesi li siguran da je ključ ostao u biblioteci?",
+            timestamp: 1736520010
+        },
+        {
+            scenarioId: 1,
+            type: "line_update",
+            lineId: 3,
+            nextLineId: 4,
+            content: "BOB: To je posljednje mjesto gdje sam ga vidio prije nego što je pala noć.",
+            timestamp: 1736520020
+        },
+        {
+            scenarioId: 1,
+            type: "line_update",
+            lineId: 4,
+            nextLineId: 5,
+            content: "ALICE: Moramo požuriti prije nego što čuvar zaključa glavna vrata.",
+            timestamp: 1736520030
+        },
+        {
+            scenarioId: 1,
+            type: "line_update",
+            lineId: 5,
+            nextLineId: 6,
+            content: "BOB: Čekaj, čuješ li taj zvuk iza polica?",
+            timestamp: 1736520040
+        },
+        {
+            scenarioId: 1,
+            type: "line_update",
+            lineId: 6,
+            nextLineId: null,
+            content: "NARATOR: Iz sjene se polako pojavila nepoznata figura.",
+            timestamp: 1736520050
+        },
+        {
+            scenarioId: 1,
+            type: "char_rename",
+            oldName: "BOB",
+            newName: "ROBERT",
+            timestamp: 1736520100
+        }
+    ]);
+}
+
 (async () => {
     try {
         await sequelize.authenticate();
@@ -597,6 +706,8 @@ module.exports = app;
 
         await sequelize.sync({ force: true });
         console.log("Tabele su kreirane");
+
+        await initializeDatabase();
 
         app.listen(3000, () => {
             console.log("Server pokrenut na portu 3000");

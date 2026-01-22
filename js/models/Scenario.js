@@ -12,6 +12,7 @@ const Scenario = sequelize.define("Scenario", {
     allowNull: false
   }
 }, {
+  freezeTableName: true,
   timestamps: false 
 });
 

@@ -20,11 +20,12 @@ const Line = sequelize.define("Line", {
   scenarioId: {  
     type: DataTypes.INTEGER,
     references: {
-      model: "Scenarios",
+      model: "Scenario",
       key: "id"
     }
   }
 }, {
+  freezeTableName: true,
   timestamps: false
 });
 

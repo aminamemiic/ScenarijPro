@@ -10,7 +10,7 @@ const Delta = sequelize.define("Delta", {
   scenarioId: {
     type: DataTypes.INTEGER,
     references: {
-      model: "Scenarios",
+      model: "Scenario",
       key: "id"
     }
   },
@@ -43,6 +43,7 @@ const Delta = sequelize.define("Delta", {
     allowNull: false
   }
 }, {
+  freezeTableName: true,
   timestamps: false
 });
 

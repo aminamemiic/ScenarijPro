@@ -10,7 +10,7 @@ const Checkpoint = sequelize.define("Checkpoint", {
   scenarioId: {
     type: DataTypes.INTEGER,
     references: {
-      model: "Scenarios",
+      model: "Scenario",
       key: "id"
     }
   },
@@ -23,6 +23,7 @@ const Checkpoint = sequelize.define("Checkpoint", {
     allowNull: false
   }
 }, {
+  freezeTableName: true,
   timestamps: false
 });
 
